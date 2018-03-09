@@ -38,8 +38,8 @@ public class BeeneedleObjectLabelController  extends Controller {
             Map<String, Object> json = MyUtil.getJsonData(getRequest());
             Map<String, Object> page = (Map<String, Object>) json.get("page");
             Map<String, Object> row = (Map<String, Object>) json.get("row");
-            int pageNumber = (int) Double.parseDouble(page.get("pageNumber").toString());
-            int pageSize = (int) Double.parseDouble(page.get("pageSize").toString());
+            int pageNumber = MyUtil.getInt(page, "pageNumber");
+            int pageSize = MyUtil.getInt(page, "pageSize");
             String hostIds = (String) row.get("hostIds");
             String where = " where ids in (select object_ids from beeneedle_object_host where host_ids = ? )";
             Page<ObjectLabel> paginate = dao.paginate(pageNumber, pageSize, "select *",
@@ -97,9 +97,9 @@ public class BeeneedleObjectLabelController  extends Controller {
         String hostIds = (String) json.get("host_ids");
         String name = (String) json.get("name");
         String path = (String) json.get("path");
-        int type = (int) Double.parseDouble(json.get("type").toString());
-        int reli_value = (int) Double.parseDouble(json.get("reli_value").toString());
-        int sens_value = (int) Double.parseDouble(json.get("sens_value").toString());
+        int type = MyUtil.getInt(json, "type");
+        int reli_value = MyUtil.getInt(json, "reli_value");
+        int sens_value = MyUtil.getInt(json, "sens_value");
         ObjectLabel bean = getBean(ObjectLabel.class);
         String sql = "INSERT INTO beeneedle_object_host (ids, object_ids, host_ids) VALUES (?,?,?)";
         Db.update(sql, MyUtil.getRandomString(),ids, hostIds);

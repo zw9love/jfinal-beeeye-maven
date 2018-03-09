@@ -42,8 +42,8 @@ public class BeeneedleProcessSubjectController extends Controller {
             // select * from beeneedle_process_subject where ids in (select process_ids from beeneedle_process_host where host_ids = "5a95240944e8c221d915d33f" )
             String hostIds = (String) row.get("hostIds");
 			String where = " where ids in (select process_ids from beeneedle_process_host where host_ids = ? )";
-			int pageNumber = (int) Double.parseDouble(page.get("pageNumber").toString());
-			int pageSize = (int) Double.parseDouble(page.get("pageSize").toString());
+			int pageNumber = MyUtil.getInt(page, "pageNumber");
+			int pageSize = MyUtil.getInt(page, "pageSize");
 			Page<ProcessSubject> paginate = dao.paginate(pageNumber, pageSize, "select *",
 					" from " + tableName + where, hostIds);
 			List<ProcessSubject> list = paginate.getList();
@@ -72,8 +72,8 @@ public class BeeneedleProcessSubjectController extends Controller {
 		String ids = MyUtil.getRandomString();
 		String name = (String) json.get("name");
 		String path = (String) json.get("path");
-        int reli_value = (int) Double.parseDouble(json.get("reli_value").toString());
-        int sens_value = (int) Double.parseDouble(json.get("sens_value").toString());
+        int reli_value = MyUtil.getInt(json, "reli_value");
+        int sens_value = MyUtil.getInt(json, "sens_value");
 		String hostIds = (String) json.get("host_ids");
 		String sql = "INSERT INTO beeneedle_process_host (ids, process_ids, host_ids) VALUES (?,?,?)";
         Db.update(sql, MyUtil.getRandomString(),ids, hostIds);
@@ -96,8 +96,8 @@ public class BeeneedleProcessSubjectController extends Controller {
 		String ids = (String) json.get("ids");
 		String name = (String) json.get("name");
 		String path = (String) json.get("path");
-        int reli_value = (int) Double.parseDouble(json.get("reli_value").toString());
-        int sens_value = (int) Double.parseDouble(json.get("sens_value").toString());
+        int reli_value = MyUtil.getInt(json, "reli_value");
+        int sens_value = MyUtil.getInt(json, "sens_value");
 		ProcessSubject bean = getBean(ProcessSubject.class);
 		bean.setIds(ids);
 		bean.setName(name);
