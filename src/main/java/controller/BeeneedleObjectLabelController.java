@@ -37,10 +37,13 @@ public class BeeneedleObjectLabelController  extends Controller {
         } else {
             Map<String, Object> json = MyUtil.getJsonData(getRequest());
             Map<String, Object> page = (Map<String, Object>) json.get("page");
+            Map<String, Object> row = (Map<String, Object>) json.get("row");
             int pageNumber = (int) Double.parseDouble(page.get("pageNumber").toString());
             int pageSize = (int) Double.parseDouble(page.get("pageSize").toString());
+            String hostIds = (String) row.get("hostIds");
+            String where = " where ids in (select object_ids from beeneedle_object_host where host_ids = ? )";
             Page<ObjectLabel> paginate = dao.paginate(pageNumber, pageSize, "select *",
-                    " from " + tableName);
+                    " from " + tableName + where, hostIds);
             List<ObjectLabel> list = paginate.getList();
             JSONArray postList = new JSONArray();
             for (ObjectLabel objectLabel : list) {
@@ -91,12 +94,25 @@ public class BeeneedleObjectLabelController  extends Controller {
     public void post() {
         Map<String, Object> json = MyUtil.getJsonData(getRequest());
         String ids = MyUtil.getRandomString();
+        String hostIds = (String) json.get("host_ids");
+        String name = (String) json.get("name");
+        String path = (String) json.get("path");
+        int type = (int) Double.parseDouble(json.get("type").toString());
+        int reli_value = (int) Double.parseDouble(json.get("reli_value").toString());
+        int sens_value = (int) Double.parseDouble(json.get("sens_value").toString());
         ObjectLabel bean = getBean(ObjectLabel.class);
+        String sql = "INSERT INTO beeneedle_object_host (ids, object_ids, host_ids) VALUES (?,?,?)";
+        Db.update(sql, MyUtil.getRandomString(),ids, hostIds);
         bean.setIds(ids);
-        for(String key : json.keySet()){
-            Object value = json.get(key);
-            bean.set(key, value);
-        }
+        bean.setName(name);
+        bean.setPath(path);
+        bean.setType(type);
+        bean.setSensValue(sens_value);
+        bean.setReliValue(reli_value);
+//        for(String key : json.keySet()){
+//            Object value = json.get(key);
+//            bean.set(key, value);
+//        }
         bean.save();
         JSONObject jsonObj = MyUtil.getJson("成功", 200, "");
         renderJson(jsonObj.toString());

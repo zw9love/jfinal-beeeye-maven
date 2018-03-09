@@ -39,34 +39,34 @@ public class TokenInterceptor implements Interceptor {
 			if (token.equals("debug")) {
 				inv.invoke();
 			} else {
-				inv.invoke();
-//				HttpSession session = request.getSession();
-//				JSONObject loginObj = (JSONObject) session.getAttribute(token);
-//				// 如果loginObj已经是null
-//				if (loginObj == null) {
-//					JSONObject json = MyUtil.getJson("用户登录失效", 611, "");
-//					controller.renderJson(json.toString());
-//				} else {
-//					String loginName;
-//					try {
-//						loginName =(String) loginObj.get("login_name");
-//						String sessionToken = (String) session.getAttribute(loginName);
-//						int nowTime = Math.round(new Date().getTime() / 1000);
-//						int expireTime = (int)loginObj.get("expireTime");
-//						// 两个token值相同
-//						if(sessionToken.equals(token)) && expireTime >= nowTime){
-//							loginObj.put("expireTime", MyUtil.getRefreshTime()); // 刷新过期时间
-//							session.setAttribute(token, loginObj);
-//							inv.invoke();
-//						}else{
-//							session.removeAttribute(token);
-//							JSONObject json = MyUtil.getJson("用户登录失效", 611, "");
-//							controller.renderJson(json.toString());
-//						}
-//					} catch (JSONException e) {
-//						e.printStackTrace();
-//					}
-//				}
+//				inv.invoke();
+				HttpSession session = request.getSession();
+				JSONObject loginObj = (JSONObject) session.getAttribute(token);
+				// 如果loginObj已经是null
+				if (loginObj == null) {
+					JSONObject json = MyUtil.getJson("用户登录失效", 611, "");
+					controller.renderJson(json.toString());
+				} else {
+					String loginName;
+					try {
+						loginName =(String) loginObj.get("login_name");
+						String sessionToken = (String) session.getAttribute(loginName);
+						int nowTime = Math.round(new Date().getTime() / 1000);
+						int expireTime = (int)loginObj.get("expireTime");
+						// 两个token值相同
+						if(sessionToken.equals(token) && expireTime >= nowTime){
+							loginObj.put("expireTime", MyUtil.getRefreshTime()); // 刷新过期时间
+							session.setAttribute(token, loginObj);
+							inv.invoke();
+						}else{
+							session.removeAttribute(token);
+							JSONObject json = MyUtil.getJson("用户登录失效", 611, "");
+							controller.renderJson(json.toString());
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 
 		}

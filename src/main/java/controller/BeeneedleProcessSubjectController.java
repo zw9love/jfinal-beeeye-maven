@@ -19,7 +19,6 @@ import util.MyUtil;
 public class BeeneedleProcessSubjectController extends Controller {
 	private static final ProcessSubject dao = new ProcessSubject().dao();
 	private final String tableName = "beeneedle_process_subject";
-
 	@SuppressWarnings("unchecked")
 	public void get() throws JSONException {
 		String ids = getPara();
@@ -39,10 +38,14 @@ public class BeeneedleProcessSubjectController extends Controller {
 		} else {
 			Map<String, Object> json = MyUtil.getJsonData(getRequest());
 			Map<String, Object> page = (Map<String, Object>) json.get("page");
+			Map<String, Object> row = (Map<String, Object>) json.get("row");
+            // select * from beeneedle_process_subject where ids in (select process_ids from beeneedle_process_host where host_ids = "5a95240944e8c221d915d33f" )
+            String hostIds = (String) row.get("hostIds");
+			String where = " where ids in (select process_ids from beeneedle_process_host where host_ids = ? )";
 			int pageNumber = (int) Double.parseDouble(page.get("pageNumber").toString());
 			int pageSize = (int) Double.parseDouble(page.get("pageSize").toString());
 			Page<ProcessSubject> paginate = dao.paginate(pageNumber, pageSize, "select *",
-					" from " + tableName);
+					" from " + tableName + where, hostIds);
 			List<ProcessSubject> list = paginate.getList();
 			JSONArray postList = new JSONArray();
 			for (ProcessSubject processSubject : list) {
@@ -69,11 +72,18 @@ public class BeeneedleProcessSubjectController extends Controller {
 		String ids = MyUtil.getRandomString();
 		String name = (String) json.get("name");
 		String path = (String) json.get("path");
+        int reli_value = (int) Double.parseDouble(json.get("reli_value").toString());
+        int sens_value = (int) Double.parseDouble(json.get("sens_value").toString());
+		String hostIds = (String) json.get("host_ids");
+		String sql = "INSERT INTO beeneedle_process_host (ids, process_ids, host_ids) VALUES (?,?,?)";
+        Db.update(sql, MyUtil.getRandomString(),ids, hostIds);
 		// ProcessSubject bean = getModel(ProcessSubject.class);
 		ProcessSubject bean = getBean(ProcessSubject.class);
 		bean.setIds(ids);
 		bean.setName(name);
 		bean.setPath(path);
+        bean.setSensValue(sens_value);
+        bean.setReliValue(reli_value);
 		// bean.update();
 		bean.save();
 		// System.out.println("name = " + name);
@@ -86,10 +96,14 @@ public class BeeneedleProcessSubjectController extends Controller {
 		String ids = (String) json.get("ids");
 		String name = (String) json.get("name");
 		String path = (String) json.get("path");
+        int reli_value = (int) Double.parseDouble(json.get("reli_value").toString());
+        int sens_value = (int) Double.parseDouble(json.get("sens_value").toString());
 		ProcessSubject bean = getBean(ProcessSubject.class);
 		bean.setIds(ids);
 		bean.setName(name);
 		bean.setPath(path);
+		bean.setSensValue(sens_value);
+		bean.setReliValue(reli_value);
 		bean.update();
 		// bean.save();
 		// System.out.println("name = " + name);

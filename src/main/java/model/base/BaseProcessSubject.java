@@ -30,6 +30,22 @@ public class BaseProcessSubject<M extends BaseProcessSubject<M>> extends Model<M
 		return get("path");
 	}
 
+	public Integer getSensValue() {
+		return get("sens_value");
+	}
+
+	public void setSensValue(Integer sensValue) {
+		set("sens_value", sensValue);
+	}
+
+	public Integer getReliValue() {
+		return get("reli_value");
+	}
+
+	public void setReliValue(Integer reliValue) {
+		set("reli_value", reliValue);
+	}
+
 	protected String getTable() {
 		return "beeneedle_process_subject";
 	}
