@@ -79,6 +79,7 @@ public class RouteConfig extends JFinalConfig {
 		me.add("/BeeneedleObjectHost", BeeneedleObjectHostController.class);
 		me.add("/BeeneedleIntegrity", BeeneedleIntegrityController.class);
 		me.add("/BeeneedlePelf", BeeeyePelfController.class);
+		me.add("/BeeneedleMac", BeeneedleMacController.class);
 		me.add("/SoftWare_SPEC/updown", BeeeyeSoftWareController.class);
 		me.add("/bl/win", BeeeyeWindowsSafeLibController.class);
 		me.add("/bl/linux", BeeeyeLinuxSafeLibController.class);

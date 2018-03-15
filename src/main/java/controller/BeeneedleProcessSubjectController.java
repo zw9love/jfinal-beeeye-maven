@@ -42,8 +42,13 @@ public class BeeneedleProcessSubjectController extends Controller {
             // select * from beeneedle_process_subject where ids in (select process_ids from beeneedle_process_host where host_ids = "5a95240944e8c221d915d33f" )
             String hostIds = (String) row.get("hostIds");
 			String where = " where ids in (select process_ids from beeneedle_process_host where host_ids = ? )";
-			int pageNumber = MyUtil.getInt(page, "pageNumber");
-			int pageSize = MyUtil.getInt(page, "pageSize");
+            int pageNumber = 1;
+            int pageSize = 1000000;
+
+            if(json.containsKey("page")){
+                pageNumber = MyUtil.getInt(page, "pageNumber");
+                pageSize = MyUtil.getInt(page, "pageSize");
+            }
 			Page<ProcessSubject> paginate = dao.paginate(pageNumber, pageSize, "select *",
 					" from " + tableName + where, hostIds);
 			List<ProcessSubject> list = paginate.getList();

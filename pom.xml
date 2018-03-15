@@ -88,11 +88,11 @@
     	<artifactId>cos</artifactId>
     	<version>2017.5</version>
     </dependency>
-	  <!--<dependency>-->
-	  <!--<groupId>com.alibaba</groupId>-->
-	  <!--<artifactId>fastjson</artifactId>-->
-	  <!--<version>1.2.28</version>-->
-	  <!--</dependency>-->
+	  <dependency>
+		  <groupId>com.alibaba</groupId>
+		  <artifactId>fastjson</artifactId>
+		  <version>1.2.28</version>
+	  </dependency>
 
 	  <!-- https://mvnrepository.com/artifact/org.json/json -->
 	  <dependency>

@@ -38,10 +38,19 @@ public class BeeneedleObjectLabelController  extends Controller {
             Map<String, Object> json = MyUtil.getJsonData(getRequest());
             Map<String, Object> page = (Map<String, Object>) json.get("page");
             Map<String, Object> row = (Map<String, Object>) json.get("row");
-            int pageNumber = MyUtil.getInt(page, "pageNumber");
-            int pageSize = MyUtil.getInt(page, "pageSize");
-            String hostIds = (String) row.get("hostIds");
             String where = " where ids in (select object_ids from beeneedle_object_host where host_ids = ? )";
+            int pageNumber = 1;
+            int pageSize = 1000000;
+            if(json.containsKey("page")){
+                pageNumber = MyUtil.getInt(page, "pageNumber");
+                pageSize = MyUtil.getInt(page, "pageSize");
+            }else{
+                int type = MyUtil.getInt(row, "type");
+                if(type >= 0){
+                    where = " where type  = " + type + " and ids in (select object_ids from beeneedle_object_host where host_ids = ? )";
+                }
+            }
+            String hostIds = (String) row.get("hostIds");
             Page<ObjectLabel> paginate = dao.paginate(pageNumber, pageSize, "select *",
                     " from " + tableName + where, hostIds);
             List<ObjectLabel> list = paginate.getList();
@@ -55,7 +64,6 @@ public class BeeneedleObjectLabelController  extends Controller {
                 }
                 postList.put(obj);
             }
-
             int totalPage = paginate.getTotalPage();
             int totalRow = paginate.getTotalRow();
             JSONObject resObj = MyUtil.getPageJson(postList, pageNumber, pageSize, totalPage, totalRow);

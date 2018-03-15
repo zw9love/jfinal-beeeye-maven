@@ -2,6 +2,9 @@ package controller;
 /**
  * Created by admin on 2018/2/2.
  */
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +43,7 @@ public class BeeeyeHostController extends Controller {
         } else {
             Map<String, Object> json = MyUtil.getJsonData(getRequest());
 //            System.out.println(json);
-            if(json == null || json.isEmpty()){
+            if (json == null || json.isEmpty()) {
                 List<Host> list = dao.find("select * from " + tableName);
                 JSONArray postList = new JSONArray();
                 for (Host item : list) {
@@ -54,7 +57,7 @@ public class BeeeyeHostController extends Controller {
                 }
                 JSONObject jsonObj = MyUtil.getJson("成功", 200, postList);
                 renderJson(jsonObj.toString());
-            }else{
+            } else {
                 Map<String, Object> page = (Map<String, Object>) json.get("page");
                 int pageNumber = (int) Double.parseDouble(page.get("pageNumber").toString());
                 int pageSize = (int) Double.parseDouble(page.get("pageSize").toString());
@@ -81,11 +84,71 @@ public class BeeeyeHostController extends Controller {
     }
 
     public void getSystems() {
-        JSONObject jsonObj = MyUtil.getJson("成功", 200, "");
+        JSONObject jsonObj;
+        List<JSONObject> linuxVersionList = new ArrayList<JSONObject>();
+        List<JSONObject> WindowsVersionList = new ArrayList<JSONObject>();
+        List<JSONObject> resList = new ArrayList<JSONObject>();
+        JSONObject linuxMap = new JSONObject();
+        JSONObject windowsMap = new JSONObject();
+        linuxMap.put("name", "linux");
+        linuxMap.put("version", linuxVersionList);
+        windowsMap.put("name", "windows");
+        windowsMap.put("version", WindowsVersionList);
+        resList.add(linuxMap);
+        resList.add(windowsMap);
+        String path = "C:/systems";
+        File file = new File(path);
+        if (file.exists()) {
+            String[] list = file.list();
+            for (String filename : list) {
+                String[] splitList = filename.split("-");
+                String type = splitList[1];
+                String version = splitList[2];
+                String arch = splitList[3];
+                for (JSONObject resItem : resList) {
+                    String versionName = resItem.getString("name");
+                    JSONArray versionList = resItem.getJSONArray("version");
+//                    List<JSONObject> versionList = (List<JSONObject>) resItem.get("version");
+                    if (versionName.equals(type)) {
+                        if (versionList.length() == 0) {
+                            JSONObject versionMap = new JSONObject();
+                            List<String> archList = new ArrayList<String>();
+                            archList.add(arch);
+                            versionMap.put("value", version);
+                            versionMap.put("arch", archList);
+                            versionList.put(versionMap);
+                        } else {
+                            Boolean flag = true;
+                            for (int i = 0; i < versionList.length(); i++) {
+                                JSONObject versionItem = (JSONObject)versionList.get(i);
+                                String val = (String) versionItem.get("value");
+                                JSONArray archList = versionItem.getJSONArray("arch");
+//                                List<String> archList = (List<String>) versionItem.get("arch");
+                                if (val.equals(version)) {
+                                    archList.put(arch);
+                                    flag = false;
+                                }
+                            }
+                            if (flag) {
+                                JSONObject versionMap = new JSONObject();
+                                List<String> archList = new ArrayList<String>();
+                                archList.add(arch);
+                                versionMap.put("value", version);
+                                versionMap.put("arch", archList);
+                                versionList.put(versionMap);
+                            }
+                        }
+                    }
+                }
+            }
+            jsonObj = MyUtil.getJson("成功", 200, resList);
+        } else {
+            jsonObj = MyUtil.getJson("系统文件不存在。", 606, null);
+        }
         renderJson(jsonObj.toString());
     }
 
-    public void checkInfo(){
+    public void checkInfo() {
         JSONObject jsonObj = MyUtil.getJson("成功", 200, "");
         renderJson(jsonObj.toString());
     }
@@ -95,11 +158,12 @@ public class BeeeyeHostController extends Controller {
         String ids = MyUtil.getRandomString();
         Host bean = getBean(Host.class);
         bean.setHostIds(ids);
-        for(String key : json.keySet()){
+        for (String key : json.keySet()) {
             Object value = json.get(key);
             bean.set(key, value);
         }
         bean.setRecordHash("");
+        bean.setStatus(0);
         bean.save();
         JSONObject jsonObj = MyUtil.getJson("成功", 200, "");
         renderJson(jsonObj.toString());
@@ -111,7 +175,7 @@ public class BeeeyeHostController extends Controller {
         String ids = (String) json.get("host_ids");
         Host bean = getBean(Host.class);
         bean.setHostIds(ids);
-        for(String key : json.keySet()){
+        for (String key : json.keySet()) {
             Object value = json.get(key);
             bean.set(key, value);
         }
@@ -134,7 +198,7 @@ public class BeeeyeHostController extends Controller {
             List<String> lists = MyUtil.getListData(getRequest());
             String sql = "delete from " + tableName + " where ids in (";
             for (int i = 0; i < lists.size(); i++) {
-                sql += i == lists.size() - 1 ? "'" + lists.get(i) + "')": "'" + lists.get(i) + "', ";
+                sql += i == lists.size() - 1 ? "'" + lists.get(i) + "')" : "'" + lists.get(i) + "', ";
             }
             // System.out.println(sql);
             int effectCount = Db.delete(sql);

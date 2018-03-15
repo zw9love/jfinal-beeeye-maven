@@ -33,5 +33,6 @@ public class _MappingKit {
 		arp.addMapping("beeeye_baseline_win", "ids", WindowsSafeLib.class);
 		arp.addMapping("beeeye_baseline_linux", "ids", LinuxSafeLib.class);
 		arp.addMapping("beeeye_host_threshold", "ids", Threshold.class);
+		arp.addMapping("beeneedle_mac", "ids", Mac.class);
 	}
 }

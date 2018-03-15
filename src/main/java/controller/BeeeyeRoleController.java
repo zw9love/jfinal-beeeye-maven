@@ -23,11 +23,7 @@ public class BeeeyeRoleController extends Controller {
 		JSONObject jsonObj;
 		if (role == null) {
 			if(token.equals("debug")){
-				JSONObject rootObj = new JSONObject();
-				rootObj.put("zh_names", "超级管理员");
-				rootObj.put("login_name", "root");
-				rootObj.put("ids", 0);
-				jsonObj = MyUtil.getJson("成功", 200, rootObj);
+				jsonObj = MyUtil.getJson("成功", 200, null);
 			}
 			else
 				jsonObj = MyUtil.getJson("失败", 606, "");
