@@ -165,7 +165,6 @@ public class BeeeyeAllAuditController extends Controller {
 
         for (int i = 0; i < tempList.length(); i++) {
             JSONObject dataObject = tempList.getJSONObject(i);
-//            System.out.println(dataObject);
             String dateStr = dataObject.getString("time");
             for (int j = 0; j < postList.length(); j++) {
                 JSONObject jsonObject = postList.getJSONObject(j);
