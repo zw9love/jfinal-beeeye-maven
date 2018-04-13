@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.jfinal.plugin.activerecord.Record;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -130,6 +132,20 @@ public class MyUtil {
         return list;
     }
 
+    public static JSONArray getRecordData(List<Record> list){
+        JSONArray postList = new JSONArray();
+        for (Record item : list) {
+            String[] Names = item.getColumnNames();
+            JSONObject obj = new JSONObject();
+            for (String param : Names) {
+                Object object = item.get(param);
+                obj.put(param, object);
+            }
+            postList.put(obj);
+        }
+        return postList;
+    }
+
     public static int getTime() {
         return (int) Math.floor(new Date().getTime() / 1000);
     }
@@ -140,6 +156,17 @@ public class MyUtil {
 
     public static int getInt(Map<String, Object> map, String param){
         return (int) Double.parseDouble(map.get(param).toString());
+    }
+
+    public static String getString(Map<String, Object> map, String param){
+        return (String) map.get(param);
+    }
+
+    public static String getNumbers(String val){
+        if(val.length() == 1){
+            return "0" + val;
+        }
+        return val;
     }
 
     /**

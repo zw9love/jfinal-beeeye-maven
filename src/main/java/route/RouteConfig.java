@@ -85,6 +85,8 @@ public class RouteConfig extends JFinalConfig {
 		me.add("/bl/linux", BeeeyeLinuxSafeLibController.class);
 		me.add("/hostTh", BeeeyeThresholdController.class);
 		me.add("/audit/output", BeeeyeAuditOutController.class);
+		me.add("/ResourceCollection", BeeeyeResourcesCollection.class);
+		me.add("/AllAudit", BeeeyeAllAuditController.class);
 	}
 
 	public void configEngine(Engine me) {
