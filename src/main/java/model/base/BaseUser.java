@@ -79,6 +79,10 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 		return get("record_hash");
 	}
 
+	public int getLastPasswordChange(){return get("last_password_change"); }
+
+	public void setLastPasswordChange(int lastPasswordChange){set("last_password_change", lastPasswordChange); }
+
 	protected String getTable() {
 		return "common_user";
 	}

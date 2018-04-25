@@ -5,6 +5,7 @@ package controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.jfinal.plugin.activerecord.Db;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +29,8 @@ public class BeeeyeRoleController extends Controller {
 			else
 				jsonObj = MyUtil.getJson("失败", 606, "");
 		} else {
-			String username = (String) role.get("username");
+			String roleIds = (String) role.get("role_ids");
+			String username = Db.queryStr("select zh_names from common_role where ids = ? ", roleIds);
 			String login_name = (String) role.get("login_name");
 			String ids = (String) role.get("ids");
 			JSONObject resObj = new JSONObject();

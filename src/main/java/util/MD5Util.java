@@ -5,6 +5,11 @@ package util;
 import java.security.MessageDigest;
 
 public class MD5Util {
+
+	public static void main(String[] args) {
+		System.out.println(encrypt("433ac6270466f8fe1dda059611e5251d"));;
+	}
+
 	// 生成MD5
 	public static String encrypt(String message) {
 		String md5 = "";

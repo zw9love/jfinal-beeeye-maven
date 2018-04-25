@@ -19,48 +19,6 @@ import java.util.Map;
  * @date 2018/04/11 12:31
  */
 public class BeeeyeAllAuditController extends Controller {
-    public static void main(String[] args) {
-        String host_ids = "5aab3228f266320f5b780415";
-        String sql = "select bpaa.time as time, bpaa.count as processAssess, bsaa.count as sensesAssess, bgfa.count as wbg_count, bfaa.count as attributePro from \n" +
-                "(\n" +
-                "\tSELECT FROM_UNIXTIME(time, '%m-%e') as time, COUNT(*) AS count \n" +
-                "\tFROM beeneedle_process_access_audit \n" +
-                "\tWHERE host_ids = '" + host_ids + "' and time BETWEEN UNIX_TIMESTAMP('2018-2-20 00:00:00') AND UNIX_TIMESTAMP('2018-3-20 00:00:00')\n" +
-                "\tGROUP BY FROM_UNIXTIME(time, '%Y%m%e') \n" +
-                ") as bpaa\n" +
-                "left join\n" +
-                "(\n" +
-                "\tSELECT FROM_UNIXTIME(time, '%m-%e') as time, COUNT(*) AS count \n" +
-                "\tFROM beeneedle_senses_access_audit \n" +
-                "\tWHERE host_ids = '" + host_ids + "' and time BETWEEN UNIX_TIMESTAMP('2018-3-1 00:00:00') AND UNIX_TIMESTAMP('2018-3-31 00:00:00')\n" +
-                "\tGROUP BY FROM_UNIXTIME(time, '%Y%m%e') \n" +
-                ") as bsaa\n" +
-                "on bpaa.time = bsaa.time \n" +
-                "left join\n" +
-                "(\n" +
-                "\tSELECT FROM_UNIXTIME(time, '%m-%e') as time, COUNT(*) AS count \n" +
-                "\tFROM beeneedle_gray_file_audit \n" +
-                "\tWHERE host_ids = '" + host_ids + "' and time BETWEEN UNIX_TIMESTAMP('2018-3-1 00:00:00') AND UNIX_TIMESTAMP('2018-3-31 00:00:00')\n" +
-                "\tGROUP BY FROM_UNIXTIME(time, '%Y%m%e') \n" +
-                ") as bgfa\n" +
-                "on bpaa.time = bgfa.time \n" +
-                "left join\n" +
-                "(\n" +
-                "\tSELECT FROM_UNIXTIME(time, '%m-%e') as time, COUNT(*) AS count \n" +
-                "\tFROM beeneedle_file_access_audit \n" +
-                "\tWHERE host_ids = '" + host_ids + "' and time BETWEEN UNIX_TIMESTAMP('2018-3-1 00:00:00') AND UNIX_TIMESTAMP('2018-3-31 00:00:00')\n" +
-                "\tGROUP BY FROM_UNIXTIME(time, '%Y%m%e') \n" +
-                ") as bfaa\n" +
-                "on bpaa.time = bfaa.time \n" +
-                "ORDER BY time;";
-        List<Record> list = Db.find(sql);
-        JSONArray postList = MyUtil.getRecordData(list);
-        for (int i = 0; i < postList.length(); i++) {
-            JSONObject jsonObject = postList.getJSONObject(i);
-            System.out.println(jsonObject);
-        }
-
-    }
 
     public void get() throws JSONException {
         Map<String, Object> json = MyUtil.getJsonData(getRequest());
