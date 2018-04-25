@@ -1,5 +1,6 @@
 package controller;
 
+import annotation.MethodValidator;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -8,11 +9,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import util.MyUtil;
 
+import javax.annotation.Resource;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zenngwei
@@ -20,11 +20,25 @@ import java.util.Map;
  */
 public class BeeeyeAllAuditController extends Controller {
 
+    @MethodValidator(name="get", age = 100)
+    public void doSomething() {
+    }
+//    @Resource
+    public static void main(String[] args) throws Exception{
+        Method method = BeeeyeAllAuditController.class.getMethod("doSomething", null);
+        // 可以判断出方法是是不是存在MyTarget的注解，能打印出这句话证明我们写的确实是一个注解
+        if (method.isAnnotationPresent(MethodValidator.class)) {
+            MethodValidator methodValidator = method.getAnnotation(MethodValidator.class);
+            System.out.println(methodValidator.name());
+            System.out.println(methodValidator.age());
+        }
+    }
+
     public void get() throws JSONException {
         Map<String, Object> json = MyUtil.getJsonData(getRequest());
         String host_ids = MyUtil.getString(json, "host_ids");
         int dayCount = 30;
-        if(json.containsKey("date"))
+        if (json.containsKey("date"))
             dayCount = MyUtil.getInt(json, "date");
 
         int time = (int) Math.floor(System.currentTimeMillis() / 1000);
@@ -133,7 +147,10 @@ public class BeeeyeAllAuditController extends Controller {
             dataList.put(dataObject);
         }
 
-        JSONObject jsonObj = MyUtil.getJson("成功", 200, dataList);
+        List<Object> dataReverseList = dataList.toList();
+        Collections.reverse(dataReverseList);
+
+        JSONObject jsonObj = MyUtil.getJson("成功", 200, dataReverseList);
         renderJson(jsonObj.toString());
     }
 }

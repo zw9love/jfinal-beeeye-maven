@@ -16,5 +16,6 @@ public @interface  MethodValidator {
      * 验证器方法
      * @return
      */
-    String name();
+    String name() default "post";
+    int age() default 20;
 }
