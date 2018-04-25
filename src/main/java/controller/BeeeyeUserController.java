@@ -112,7 +112,7 @@ public class BeeeyeUserController extends Controller {
 		bean.setRoleIds((String)role.get("role_ids"));
 		bean.setLastPasswordChange((int) Math.floor(System.currentTimeMillis() / 1000));
 		bean.save();
-		JSONObject jsonObj = MyUtil.getJson("成功", 200, null);
+		JSONObject jsonObj = MyUtil.getJson("成功", 200, "");
 		renderJson(jsonObj.toString());
 	}
 
@@ -128,7 +128,7 @@ public class BeeeyeUserController extends Controller {
 				jsonObj = MyUtil.getJson("失败，此ids不存在", 606, "");
 
 		}else{
-			jsonObj = MyUtil.getJson("传递参数有误", 606, null);
+			jsonObj = MyUtil.getJson("传递参数有误", 606, "");
 		}
 		renderJson(jsonObj.toString());
 	}
