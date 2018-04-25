@@ -21,7 +21,7 @@ public class MD5Util {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return decrypt(md5); // 默认admin.123加密密码 G2LB1ELM7D5FC71D1M6E2EBMACE0L2F5
+		return decrypt(md5); // 默认admin123.com加密密码 G2LB1ELM7D5FC71D1M6E2EBMACE0L2F5
 	}
 
 	// 加密后解密
