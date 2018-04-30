@@ -26,7 +26,8 @@ import validator.LoginValidator;
 //@Before(LoginValidator.class)
 public class LoginController extends Controller {
     public void index() {
-        render("../login.html");
+//        System.out.println("进来了吗");
+        render("login.html");
     }
 
 //    @MethodValidator(name="dologinValidate")

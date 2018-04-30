@@ -20,7 +20,12 @@ public class IndexController extends Controller {
 			setLoginActive(false);
 			render("index.html");
 		} else {
+//			render("login.html");
 			redirect("/login");
 		}
 	}
+
+//	public void login(){
+//		System.out.println();
+//	}
 }

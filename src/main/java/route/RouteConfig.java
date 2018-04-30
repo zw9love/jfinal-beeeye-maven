@@ -53,10 +53,15 @@ public class RouteConfig extends JFinalConfig {
 		PropKit.use("jdbc_config.txt");
 		me.setDevMode(PropKit.getBoolean("devMode", false));
 		String systemName = System.getProperty("os.name");
+		System.out.println(systemName);
 		if(systemName.toLowerCase().contains("windows")){
 //			System.out.println("windows操作系统");
 			me.setBaseUploadPath("C:\\jfinal-beeeye-maven\\upload");
-		}else{
+		}
+		else if(systemName.toLowerCase().contains("mac")){
+			me.setBaseUploadPath("/usr/local/apache-tomcat-8.5.30/webapp");
+		}
+		else{
 			me.setBaseUploadPath("/usr/local/share/lpdata/tomcat/webapp");
 		}
 	}
@@ -67,7 +72,7 @@ public class RouteConfig extends JFinalConfig {
 	public void configRoute(Routes me) {
 		// me.add("/", LoginController.class);
 		me.add("/", IndexController.class); // 第三个参数为该Controller的视图存放路径
-		me.add("/login", LoginController.class);
+		me.add("/login", LoginController.class, "/");
 		me.add("/menu", BeeeyeMenuController.class);
 		me.add("/host", BeeeyeHostController.class);
 		me.add("/user", BeeeyeUserController.class);
