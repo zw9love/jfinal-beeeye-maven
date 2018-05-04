@@ -34,7 +34,7 @@ public class BeeeyeMenuController extends Controller {
 			postList.put(obj);
 		}
 
-		JSONObject jsonObj = MyUtil.getJson("成功", 200, postList);
+		JSONObject jsonObj = MyUtil.getJson("成功", 200, list);
 		renderJson(jsonObj.toString());
 	}
 }

@@ -22,6 +22,7 @@ public class _MappingKit {
 		arp.addMapping("beeeye_host", "host_ids", Host.class);
 		arp.addMapping("common_user", "ids", User.class);
 		arp.addMapping("common_menu", "ids", Menu.class);
+		arp.addMapping("beeeye_baseline", "ids", Baseline.class);
 		arp.addMapping("common_setting", "ids", Setting.class);
 		arp.addMapping("common_software_group", "ids", SoftwareInstall.class);
 		arp.addMapping("beeeye_pelf", "ids", Pelf.class);

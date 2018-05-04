@@ -7,7 +7,8 @@ import java.security.MessageDigest;
 public class MD5Util {
 
 	public static void main(String[] args) {
-		System.out.println(encrypt("433ac6270466f8fe1dda059611e5251d"));;
+		System.out.println(encrypt("433ac6270466f8fe1dda059611e5251d"));
+		// EFFEB@5M2B71C2G6EECLLG6M5EMG7MCG
 	}
 
 	// 生成MD5
